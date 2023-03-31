@@ -77,4 +77,14 @@ class News extends BaseController
             . view('templates/footer');
     }
 
+    public function delete($id = null)
+    {
+    
+     $model = new NewsModel();
+    
+     $model->delete($id);
+    
+     return redirect()->to( base_url('news') );
+    }
+
 }

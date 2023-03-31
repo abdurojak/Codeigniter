@@ -3,6 +3,8 @@
 <?= session()->getFlashdata('error') ?>
 <?= validation_list_errors() ?>
 
+<button onclick="location='./'">Back</button>
+
 <form action="/news/create" method="post">
     <?= csrf_field() ?>
 

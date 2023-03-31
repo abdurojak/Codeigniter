@@ -3,6 +3,8 @@
 
 <?php if (!empty($news) && is_array($news)) : ?>
 
+<button onclick="location='create'">Create</button>
+
     <?php 
         $no = 1;
         ?>
@@ -36,7 +38,8 @@ Link
                     <?= esc($news_item['body']) ?>
                 </td>
                 <td>
-                    <a href="/news/<?= esc($news_item['slug'], 'url') ?>">View article</a>
+                    <a href="/news/<?= esc($news_item['slug'], 'url') ?>">View article</a>||
+                    <a href=" <?php  echo base_url("news/delete/").$news_item['id']; ?>">Delete</a>
                 </td>
 
             </tr>
