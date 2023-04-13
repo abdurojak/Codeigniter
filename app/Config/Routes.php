@@ -21,12 +21,14 @@ $routes->setTranslateURIDashes(false);
 $routes->set404Override();
 
 $routes->match(['get', 'post'], 'news/create', [News::class, 'create']);
+$routes->match(['get', 'post'], 'news/edit', [News::class, 'edit']);
 $routes->get('news/(:segment)', [News::class, 'view']);
-$routes->get('news', [News::class, 'index']);
+$routes->get('/', [News::class, 'index']);
 $routes->get('pages', [Pages::class, 'index']);
 $routes->get('(:segment)', [Pages::class, 'view']);
 
 $routes->get('news/delete/(:segment)', [News::class, 'delete']);
+$routes->get('news/update/(:segment)', [News::class, 'update']);
 // The Auto Routing (Legacy) is very dangerous. It is easy to create vulnerable apps
 // where controller filters or CSRF protection are bypassed.
 // If you don't want to define all routes, please use the Auto Routing (Improved).

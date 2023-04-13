@@ -84,7 +84,66 @@ class News extends BaseController
     
      $model->delete($id);
     
-     return redirect()->to( base_url('news') );
+     return redirect()->to( base_url('/') );
+    }
+
+    public function update($id = null)
+    {
+        $model = model(NewsModel::class);
+
+        $data['news'] = $model->getNew($id);
+
+        if (empty($data['news'])) {
+            throw new PageNotFoundException('Cannot find the news item: ' . $id);
+        }
+
+        $data['title'] = $data['news']['title'];
+
+        return view('templates/header', $data)
+            . view('news/update')
+            . view('templates/footer');
+    }
+
+    public function edit()
+    {
+        helper('form');
+
+        // Checks whether the form is submitted.
+        if (! $this->request->is('post')) {
+            // The form is not submitted, so returns the form.
+            return view('templates/header', ['title' => 'Update a news item'])
+                . view('news/create')
+                . view('templates/footer');
+        }
+
+        $post = $this->request->getPost(['id','title', 'body']);
+
+        // Checks whether the submitted data passed the validation rules.
+        if (! $this->validateData($post, [
+            'title' => 'required|max_length[255]|min_length[3]',
+            'body'  => 'required|max_length[5000]|min_length[10]',
+        ])) {
+            // The validation fails, so returns the form.
+            return view('templates/header', ['title' => 'Update a news item'])
+                . view('news/update')
+                . view('templates/footer');
+        }
+
+        $id = $post['id'];
+
+        $data = [
+            'title' => $post['title'],
+            'slug' => url_title($post['title'], '-', true),
+            'body'  => $post['body'],
+        ];
+
+        $model = model(NewsModel::class);
+
+        $model->update($id, $data);
+
+        return view('templates/header', ['title' => 'Update a news item'])
+            . view('news/success')
+            . view('templates/footer');
     }
 
 }

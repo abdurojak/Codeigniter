@@ -8,7 +8,7 @@ class NewsModel extends Model
 {
     protected $table = 'news';
 
-    protected $allowedFields = ['title', 'slug', 'body'];
+    protected $allowedFields = ['id', 'title', 'slug', 'body'];
 
     public function getNews($slug = false)
     {
@@ -17,5 +17,14 @@ class NewsModel extends Model
         }
 
         return $this->where(['slug' => $slug])->first();
+    }
+
+    public function getNew($id = false)
+    {
+        if ($id === false) {
+            return $this->findAll();
+        }
+
+        return $this->where(['id' => $id])->first();
     }
 }
