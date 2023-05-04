@@ -39,6 +39,24 @@ class News extends BaseController
             . view('templates/footer');
     }
 
+    public function showFile($filename = '')
+    {
+        if($filename == ''){
+            dd('');
+        }
+        helper("filesystem");
+        $path = WRITEPATH . 'images/';
+
+        $fullpath = $path . $filename;
+        $file = new \CodeIgniter\Files\File($fullpath, true);
+        $binary = readfile($fullpath);
+        return $this->response
+                ->setHeader('Content-Type', $file->getMimeType())
+                ->setHeader('Content-disposition', 'inline; filename="' . $file->getBasename() . '"')
+                ->setStatusCode(200)
+                ->setBody($binary);
+    }
+
     public function create()
     {
         helper('form');
@@ -64,12 +82,20 @@ class News extends BaseController
                 . view('templates/footer');
         }
 
+        $img = $this->request->getFile('image');
+        $imgName = '';
+        if($img->getSize() > 0) {
+            $imgName = $img->getRandomName();
+            $img->move(WRITEPATH . 'images', $imgName);
+        }
+
         $model = model(NewsModel::class);
 
         $model->save([
             'title' => $post['title'],
             'slug'  => url_title($post['title'], '-', true),
             'body'  => $post['body'],
+            'img'  => $imgName,
         ]);
 
         return view('templates/header', ['title' => 'Create a news item'])
@@ -129,12 +155,25 @@ class News extends BaseController
                 . view('templates/footer');
         }
 
+        $img = $this->request->getFile('image');
+        $imgName = $this->request->getPost('image-old');
+        $cekDelete = $this->request->getPost('image-delete');
+        // jika diganti gambar dan bukan delete image
+        if($img->getSize() > 0 && $cekDelete != 'yes') {
+            $imgName = $img->getRandomName();
+            $img->move(WRITEPATH . 'images', $imgName);
+        }
+        if($cekDelete == 'yes') {
+            $imgName = '';
+        }
+
         $id = $post['id'];
 
         $data = [
             'title' => $post['title'],
             'slug' => url_title($post['title'], '-', true),
             'body'  => $post['body'],
+            'img'  => $imgName,
         ];
 
         $model = model(NewsModel::class);

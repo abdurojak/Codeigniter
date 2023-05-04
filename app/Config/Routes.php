@@ -29,6 +29,8 @@ $routes->get('(:segment)', [Pages::class, 'view']);
 
 $routes->get('news/delete/(:segment)', [News::class, 'delete']);
 $routes->get('news/update/(:segment)', [News::class, 'update']);
+
+$routes->get('images/(:segment)', [News::class, 'showFile']);
 // The Auto Routing (Legacy) is very dangerous. It is easy to create vulnerable apps
 // where controller filters or CSRF protection are bypassed.
 // If you don't want to define all routes, please use the Auto Routing (Improved).
