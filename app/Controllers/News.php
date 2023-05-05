@@ -4,12 +4,12 @@ namespace App\Controllers;
 
 use App\Models\NewsModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
-
 class News extends BaseController
 {
 
     public function index()
     {
+        helper('text');
         $model = model(NewsModel::class);
 
         $data = [

@@ -8,6 +8,10 @@ use App\Controllers\Pages;
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
 
+if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
+    require SYSTEMPATH . 'Config/Routes.php';
+}
+
 /*
  * --------------------------------------------------------------------
  * Router Setup
@@ -19,6 +23,14 @@ $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
+
+$routes->get('post/', 'PostController::index');
+$routes->post('post/add', 'PostController::add');
+$routes->get('post/fetch', 'PostController::fetch');
+$routes->get('post/edit/(:num)', 'PostController::edit/$1');
+$routes->get('post/delete/(:num)', 'PostController::delete/$1');
+$routes->get('post/detail/(:num)', 'PostController::detail/$1');
+$routes->post('post/update', 'PostController::update');
 
 $routes->match(['get', 'post'], 'news/create', [News::class, 'create']);
 $routes->match(['get', 'post'], 'news/edit', [News::class, 'edit']);
